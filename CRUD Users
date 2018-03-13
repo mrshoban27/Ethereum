@@ -1,0 +1,61 @@
+pragma solidity ^0.4.20;
+contract CRUDUser{
+    
+    struct UserDetails{
+        
+        string userName;
+        uint age;
+    }
+    
+    mapping (address =>UserDetails) addUser;
+    mapping (address =>bool) userExists;
+    address[] add;
+    
+    
+    function UserRegistration(string _userName,uint _age) public{
+        
+            require(userExists[msg.sender]==false);
+            require(_age>5 && _age<100);
+            address _add=msg.sender;
+            userexisting(_add);
+            
+            addUser[_add].userName=_userName;
+            addUser[_add].age=_age;
+            add.push(_add);
+        
+    }
+    
+    function userexisting(address _add) internal {
+        userExists[_add]=true;
+    }
+    function findUser(address _add) public view returns(string,uint){
+        require(userExists[_add]==true);
+        for(uint i=0;i<add.length;i++){
+            if(add[i]==_add){
+                return(addUser[_add].userName,addUser[_add].age);
+            }
+            else
+            throw;
+        }
+    }
+    
+    function getBalance()public view returns(uint){
+                return(msg.sender.balance);
+
+    }
+    
+    function delUser(address _add) public{
+        require(userExists[_add]==true);
+       // delete addUser[_add];
+        for(uint i=0;i<add.length;i++){
+            if(add[i]==_add){
+                delete add[i];
+            }
+        }
+    }
+    
+    function listAllUsers() public constant returns(address[]){
+        return add;
+    }
+    
+}
