@@ -7,7 +7,7 @@ contract mortal{
     modifier onlyowner(){
         if(owner==msg.sender)
         _;
-        else
+        else 
         throw;
     }
     
